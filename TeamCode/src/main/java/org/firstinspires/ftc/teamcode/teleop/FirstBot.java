@@ -42,7 +42,7 @@ public class FirstBot extends LinearOpMode {
             module.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
         }
 
-        g1 = gamepad1; //Defining gamepads Aarav Mehta
+        g1 = gamepad1; //Defining Variables for the gamepad - Neel 
         g2 = gamepad2; 
 
         Constants.initHardware(hardwareMap);
@@ -51,7 +51,7 @@ public class FirstBot extends LinearOpMode {
         liftR = Constants.liftR;
         liftT = Constants.liftT;
 
-        clawL = Constants.clawL; //Left and right servos on claws Aarav Mehta
+        clawL = Constants.clawL; //Initializing left and right servo motors - Neel Heblikar
         clawR = Constants.clawR;
 
         extend = Constants.extend;
@@ -72,17 +72,17 @@ public class FirstBot extends LinearOpMode {
     }
 
     public void teleopAuto() {
-        // when you hold y, the lift will move upward until it hits the target position (liftTargetHigh)
+        // when "y" key is held, lift will move up until it hits the target - Neel Heblikar
         if ((g2.dpad_up || g2.y) && Math.abs(liftR.getCurrentPosition() - Constants.liftTargetHigh) >= Constants.liftError) {
             Constants.setLift(Constants.liftTargetHigh, Constants.liftPower); // you can see this method in Constants
         }
-        // when you hold a, the lift will move downward until it gets down to 0
+        // when "a" key is held, lift will move down until it reaches 0 - Neel Heblikar
         if ((g2.dpad_down || g2.a) && Math.abs(liftR.getCurrentPosition()) >= Constants.liftError) {
             Constants.setLift(0, Constants.liftPower);
         }
-        //When you hold d, the lift will stay up and will hold Aarav Mehta
+        //When d is held, lift will stay up - Neel Heblikar
 
-        // if neither a nor y are pressed, the right joystick will be controlling lift
+        // if y and a are not present, right joystick will control - Neel Heblikar
         if (!g2.dpad_down && !g2.dpad_up && !g2.a && !g2.y && !g2.dpad_left) {
             if (g2.left_stick_y == 0 && Math.abs(liftR.getCurrentPosition()) >= Constants.liftError){
                 if (!isHolding){
@@ -95,14 +95,14 @@ public class FirstBot extends LinearOpMode {
                 liftL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 liftR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 liftT.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                // squared input
+                // squared input - Neel Heblikar
                 double liftInput = Math.pow(gamepad2.left_stick_y, 2);
                 if (gamepad2.left_stick_y < 0) liftInput *= -1;
 
                 isHolding = false;
                 holdPos = 0;
 
-                // opposite powers
+                // Opposite powers - Neel Heblikar
                 if (liftR.getCurrentPosition() > -4500 || gamepad2.left_stick_y < 0) {
                     liftL.setPower(-liftInput);
                     liftR.setPower(liftInput);
@@ -111,35 +111,35 @@ public class FirstBot extends LinearOpMode {
             }
         }
 
-        //Dpad right -> turret goes to 90 degrees (right)
+        // if Dpad is right, the turret will move right 90 degrees - Neel Heblikar
         if (g2.b && Math.abs(turretR.getCurrentPosition() - Constants.turretTarget90) >= Constants.turretError) {
             Constants.setTurret(90, false, Constants.turretPower); // look at this method in Constants
         }
-        //Dpad left -> turret goes to -90 degrees (left)
+        //if Dpad is left, turret will move 90 degrees left - Neel Heblikar
         else if (g2.x && Math.abs(turretR.getCurrentPosition() - Constants.turretTargetNeg90) >= Constants.turretError) {
             Constants.setTurret(-90, false, Constants.turretPower);
         }
-        //Dpad down -> turret goes to 180 degrees (backward)
+        //if Dpad is down, turret will move back 180 degrees - Neel Heblikar
         else if (g2.y && Math.abs(turretR.getCurrentPosition() - Constants.turretTarget180) >= Constants.turretError) {
             Constants.setTurret(180, false, Constants.turretPower);
         }
-        //Dpad up -> turret goes to 0 degrees (forward)
+        //if Dpad is up, turret goes to 0 degrees - Neel Heblikar
         else if (g2.a && Math.abs(turretR.getCurrentPosition()) >= Constants.turretError) {
             Constants.setTurret(0, false, Constants.turretPower);
         }
         //If no dpads are pressed, left joystick will control turret
         else if (!g2.x && !g2.a && !g2.y && !g2.b) {
             turretR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            // squared input, 0.5 speed
+            // squared input, 0.5 speed - Neel Heblikar
             double turretInput = -Math.pow(gamepad2.right_stick_x, 2) * 0.55;
-            // left trigger = slow mode
+            // Slow Mode = Left Trigger - Neel Heblikar
 //            if (g2.left_trigger == 1) turretInput *= 0.7;
             if (gamepad2.right_stick_x < 0) turretInput *= -1;
 
             turretR.setPower(turretInput);
         }
 
-        // press b -> resets all encoders
+        // if "b" key is pressed, it resets all encoders - Neel Heblikar
         if (g2.dpad_right) {
             liftL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             liftL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -160,16 +160,16 @@ public class FirstBot extends LinearOpMode {
         double x = -gamepad1.left_stick_x;
         double turn = -gamepad1.right_stick_x;
 
-        // only important numbers are here - default movement speed
+        // defining default Speed - Neel Heblikar
         double multiplier = 0.75;
         // curve to apply (squared rn)
         double power = 2.0;
 
-        // slow mode = right trigger
+        // slow mode = right trigger - Neel Heblikar
         if (g1.right_bumper) {
             multiplier = 0.3;
         }
-        // fast mode = left trigger
+        // fast mode = left trigger - Neel Heblikar
         if (g1.left_bumper) {
             multiplier = 1;
         }
@@ -188,22 +188,22 @@ public class FirstBot extends LinearOpMode {
 
         drive.setWeightedDrivePower(new Pose2d(y, x, turn));
 
-        // right bumper -> close claw
+        // Close Claw = right bumper - Neel Heblikar
         if (gamepad2.right_bumper) {
             Constants.setClaw(Constants.ClawPosition.CLOSED);
         }
-        // left bumper -> close claw
+        // Close Claw = left bumper - Neel Heblikar
         if (gamepad2.left_bumper) {
             Constants.setClaw(Constants.ClawPosition.OPEN);
         }
 
-        // as you hold down right trigger, the extension will gradually go outward
-        // when the trigger is 0, the extension will be at Constants.extendInPos
-        // when the trigger is 1, the extension will be at Constants.extendOutPos
-        // in between, the extension will be set proportionally
+        // extension goes outward if right trigger is held - Neel Heblikar
+        // Constants.extendInPos = Trigger is at 0 - Neel Heblikar
+        // Constants.extendOutPos = Trigger is at 1 - Neel Heblikar
+        // Between = set proportional - Neel Heblikar
 
-//        double extensionValue = (Math.sqrt(gamepad2.right_trigger) + Math.sqrt(gamepad2.left_trigger)) / 2.0;
-//        extend.setPosition((1 - extensionValue) * (Constants.extendInPos - Constants.extendOutPos) + Constants.extendOutPos);
+//        double extensionValue = (Math.sqrt(gamepad2.right_trigger) + Math.sqrt(gamepad2.left_trigger)) / 2.0; - Neel Heblikar
+//        extend.setPosition((1 - extensionValue) * (Constants.extendInPos - Constants.extendOutPos) + Constants.extendOutPos); - Neel Heblikar
 
         if (gamepad2.right_trigger <= 1)
             extensionPos += (extensionRange * gamepad2.right_trigger * 0.03);
